@@ -10,7 +10,7 @@ import UIKit
 class HomePageViewController: UITabBarController {
     let selectedColor = UIColor.blue
     let deselectedColor = UIColor.gray
-    
+    var appBarController = AppBarController().view
     let tabBarNames = [
       "List",
       "Grid",
@@ -24,6 +24,12 @@ class HomePageViewController: UITabBarController {
     override func viewDidLoad(){
         super.viewDidLoad()
         self.delegate = self
+        view.addSubview(appBarController!)
+//        appBarController?.translatesAutoresizingMaskIntoConstraints = false
+//        appBarController?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        appBarController?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//        appBarController?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        appBarController?.heightAnchor.constraint(equalToConstant: 200).isActive = true
         tabBar.isTranslucent = true
         tabBar.tintColor = deselectedColor
         tabBar.unselectedItemTintColor = deselectedColor
@@ -37,8 +43,9 @@ class HomePageViewController: UITabBarController {
         self.selectPage(at: 0)
     }
     
+    
     private func tabbarItem(at index: Int) -> UITabBarItem {
-        return UITabBarItem(title: nil, image: self.tabBarImages[index], selectedImage: nil)
+        return UITabBarItem(title: tabBarNames[index], image: tabBarImages[index], selectedImage: nil)
     }
     
     private func setUpControllers(){
@@ -104,16 +111,6 @@ class HomePageViewController: UITabBarController {
         if selectedIndex == 0 {
             viewControllers[selectedIndex].tabBarItem.selectedImage = self.tabBarImages[0]!.withRenderingMode(.alwaysOriginal)
         }
-    }
-    //This method configures the tabs of the home page
-    func configuringTabs(){
-        let tabOne = UINavigationController(rootViewController: ListViewController())
-        let tabTwo = UINavigationController(rootViewController: GridViewController())
-        tabOne.tabBarItem.image = UIImage(systemName: "list.bullet.rectangle")
-        tabOne.tabBarItem.title = "List"
-        tabTwo.tabBarItem.image = UIImage(systemName: "square.grid.2x2")
-        tabTwo.tabBarItem.title = "Grid"
-        setViewControllers([tabOne,tabTwo], animated: true)
     }
 }
 

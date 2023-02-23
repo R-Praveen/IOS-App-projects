@@ -32,7 +32,7 @@ class AppBarController : UIViewController, UISearchBarDelegate {
         // Adding views to subview
         view.addSubview(firstRow)
         view.addSubview(searchBar)
-        
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 170)
         firstRow.addSubview(exploreLabel)
         firstRow.addSubview(filterLabel)
         
@@ -57,11 +57,11 @@ class AppBarController : UIViewController, UISearchBarDelegate {
     
     //MARK: Setting the properties of the search bar in the Appbar
     func setSearchBarProperties(){
-        searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
         searchBar.delegate = self
         searchBar.searchTextField.backgroundColor = UIColor.clear
         searchBar.layer.cornerRadius = 30
         searchBar.placeholder = AppStrings.search
+        
         searchBar.backgroundColor = UIColor.white
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         searchBar.setImage(UIImage(), for: .search, state: .normal)
@@ -84,14 +84,16 @@ class AppBarController : UIViewController, UISearchBarDelegate {
         //Explore label contraints
         exploreLabel.topAnchor.constraint(equalTo: firstRow.topAnchor,constant: 20).isActive = true
         exploreLabel.leadingAnchor.constraint(equalTo: firstRow.leadingAnchor,constant: 10).isActive = true
+        exploreLabel.bottomAnchor.constraint(equalTo: firstRow.bottomAnchor).isActive = true
         
         //Filter Label Constraints
         filterLabel.topAnchor.constraint(equalTo: firstRow.topAnchor,constant: 20).isActive = true
         filterLabel.trailingAnchor.constraint(equalTo: firstRow.trailingAnchor).isActive = true
-        
+        filterLabel.bottomAnchor.constraint(equalTo: firstRow.bottomAnchor).isActive = true
+
         //SearchBar Constraints
-        searchBar.topAnchor.constraint(equalTo: firstRow.bottomAnchor,constant: 30).isActive = true
-        searchBar.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -20).isActive = true
+        searchBar.topAnchor.constraint(equalTo: firstRow.bottomAnchor,constant: 15).isActive = true
+        searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 34).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -34).isActive = true
 

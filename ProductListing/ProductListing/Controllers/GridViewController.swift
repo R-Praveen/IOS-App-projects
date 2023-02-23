@@ -17,9 +17,6 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     var loader = LoaderView()
     var items: [StoreItem]?
     
-    private var appBar = UIView()
-    var appBarView = AppBarController().view
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         gridView.delegate = self
@@ -27,7 +24,6 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
         view.backgroundColor = .systemBackground
         addSubViews()
         setContraints()
-        setAppBarConstraints()
         gridView.register(UIGridViewCell.self, forCellWithReuseIdentifier: UIGridViewCell.identifier)
         gridView.contentSize = CGSize(width: 100, height: 100)
         fetchItems()
@@ -36,39 +32,20 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     //MARK: Adding the sub views for the Grid view
     func addSubViews(){
         loader = LoaderView(frame: view.frame)
-        view.addSubview(appBar)
-        appBar.addSubview(appBarView!)
         view.addSubview(gridView)
-    }
-    
-    func setAppBarConstraints(){
-        appBar.translatesAutoresizingMaskIntoConstraints = false
-        appBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        appBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        appBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        appBar.heightAnchor.constraint(equalToConstant: 170).isActive = true
-        appBar.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-        appBar.bottomAnchor.constraint(equalTo: gridView.topAnchor,constant: -30).isActive = true
     }
     
     //MARK: Setting the constraints for the APP bar and the grid view
     func setContraints(){
-        appBarView!.translatesAutoresizingMaskIntoConstraints = false
         gridView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            //App bar constraints
-            appBarView!.centerXAnchor.constraint(equalTo: appBar.centerXAnchor),
-            appBarView!.centerYAnchor.constraint(equalTo: appBar.centerYAnchor),
-            appBarView!.topAnchor.constraint(equalTo: appBar.topAnchor),
-            appBarView!.leadingAnchor.constraint(equalTo: appBar.leadingAnchor),
-            appBarView!.trailingAnchor.constraint(equalTo: appBar.trailingAnchor),
-            
             //Grid View constraints
             gridView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gridView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             gridView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            gridView.topAnchor.constraint(equalTo: appBar.bottomAnchor),
+            gridView.topAnchor.constraint(equalTo: view.topAnchor,constant: 190),
+            gridView.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -170),
             gridView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
             gridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 10),
             gridView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: 10),

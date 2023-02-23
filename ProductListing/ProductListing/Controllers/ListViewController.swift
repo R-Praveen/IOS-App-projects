@@ -14,12 +14,10 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     //MARK: Private Properties
     private var tableView = UITableView()
     private var searchTitle = UILabel()
-    private var searchBar = UISearchBar()
     private var appBar = UIView()
     private var pullToRefresh = UIRefreshControl()
     
     var viewModel : ViewModel?
-    var appBarView = AppBarController().view
     var loader = LoaderView()
 
     //MARK: Lifecycle methods
@@ -30,7 +28,6 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         viewModel = ViewModel()
         addSubViews()
         setContraints()
-        setAppBarConstraints()
         setTableViewValues()
         fetchItems()
         tableView.refreshControl = pullToRefresh
@@ -45,9 +42,6 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     //MARK: Adding the subviews
     func addSubViews(){
         loader = LoaderView(frame: view.frame)
-        view.addSubview(appBar)
-        appBar.addSubview(appBarView!
-        )
         view.addSubview(tableView)
     }
     
@@ -104,21 +98,15 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     //MARK: Setting the constraints for the appbar and the tableview
     func setContraints(){
-        appBarView!.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            //App bar constraints
-            appBarView!.centerXAnchor.constraint(equalTo: appBar.centerXAnchor),
-            appBarView!.centerYAnchor.constraint(equalTo: appBar.centerYAnchor),
-            appBarView!.topAnchor.constraint(equalTo: appBar.topAnchor),
-            appBarView!.leadingAnchor.constraint(equalTo: appBar.leadingAnchor),
-            appBarView!.trailingAnchor.constraint(equalTo: appBar.trailingAnchor),
             //Table View constraints
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            tableView.topAnchor.constraint(equalTo: appBar.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor,constant: 190),
+            tableView.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -170),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
