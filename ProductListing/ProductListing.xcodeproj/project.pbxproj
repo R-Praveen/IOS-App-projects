@@ -17,6 +17,7 @@
 		AC29E1AF299E41B000E539BF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC29E1AE299E41B000E539BF /* ListViewController.swift */; };
 		AC29E1B1299E41BB00E539BF /* GridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC29E1B0299E41BB00E539BF /* GridViewController.swift */; };
 		AC29E1B4299F1E0300E539BF /* ItemCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC29E1B3299F1E0300E539BF /* ItemCellTableViewCell.swift */; };
+		AC3BB8D129A71F8A0022E82B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BB8D029A71F8A0022E82B /* PageViewController.swift */; };
 		AC7707A6299F8DC50084E381 /* UIGridViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7707A5299F8DC50084E381 /* UIGridViewCell.swift */; };
 		AC7707AB29A06D3E0084E381 /* Items.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC7707A929A06D3E0084E381 /* Items.xcdatamodeld */; };
 		AC95E58129A29BBC00FC8502 /* StoreItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC95E57F29A29BBC00FC8502 /* StoreItem+CoreDataClass.swift */; };
@@ -61,6 +62,7 @@
 		AC29E1AE299E41B000E539BF /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		AC29E1B0299E41BB00E539BF /* GridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridViewController.swift; sourceTree = "<group>"; };
 		AC29E1B3299F1E0300E539BF /* ItemCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCellTableViewCell.swift; sourceTree = "<group>"; };
+		AC3BB8D029A71F8A0022E82B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		AC7707A5299F8DC50084E381 /* UIGridViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGridViewCell.swift; sourceTree = "<group>"; };
 		AC7707AA29A06D3E0084E381 /* Items.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Items.xcdatamodel; sourceTree = "<group>"; };
 		AC95E57F29A29BBC00FC8502 /* StoreItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreItem+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				AC29E1B0299E41BB00E539BF /* GridViewController.swift */,
 				AC29E18F299BB48B00E539BF /* HomePageViewController.swift */,
 				AC95E58629A3052900FC8502 /* AppBarController.swift */,
+				AC3BB8D029A71F8A0022E82B /* PageViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				AC29E18E299BB48B00E539BF /* SceneDelegate.swift in Sources */,
 				AC29E1A4299CBD1200E539BF /* NetworkService.swift in Sources */,
 				AC29E1AC299CC94000E539BF /* ViewModel.swift in Sources */,
+				AC3BB8D129A71F8A0022E82B /* PageViewController.swift in Sources */,
 				AC7707AB29A06D3E0084E381 /* Items.xcdatamodeld in Sources */,
 				AC95E58729A3052900FC8502 /* AppBarController.swift in Sources */,
 				AC29E1AF299E41B000E539BF /* ListViewController.swift in Sources */,

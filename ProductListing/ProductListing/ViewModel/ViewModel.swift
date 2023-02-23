@@ -27,6 +27,7 @@ class ViewModel{
             apiData = response
             if(apiData?.data.items != nil){
                 storeItems = self.coreDataHelper.saveStoreItems(items: apiData!.data.items)
+
                 callback(storeItems)
             }
             else{

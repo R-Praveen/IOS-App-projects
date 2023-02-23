@@ -14,7 +14,7 @@ class CoreDataHelper{
     private let coreDataStack: CoreDataStack
     init(coreDataStack: CoreDataStack){
         self.coreDataStack = coreDataStack
-        self.managedObjectContext = coreDataStack.getMainContext()
+        self.managedObjectContext = coreDataStack.context
     }
     /*Fetches Item from Core data and if local data is empty
     value is fetched from API.
