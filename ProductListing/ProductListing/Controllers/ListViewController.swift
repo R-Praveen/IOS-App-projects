@@ -15,6 +15,8 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     private var tableView = UITableView()
     private var searchTitle = UILabel()
     private var searchBar = UISearchBar()
+    private var appBar = UIView()
+    private var pullToRefresh = UIRefreshControl()
     
     var viewModel : ViewModel?
     var appBarView = AppBarController().view
@@ -28,26 +30,36 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         viewModel = ViewModel()
         addSubViews()
         setContraints()
+        setAppBarConstraints()
         setTableViewValues()
         fetchItems()
+        tableView.refreshControl = pullToRefresh
+        pullToRefresh.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
+    }
+    
+    @objc func handlePullToRefresh(){
+        fetchItems()
+        pullToRefresh.endRefreshing()
     }
     
     //MARK: Adding the subviews
     func addSubViews(){
         loader = LoaderView(frame: view.frame)
-        view.addSubview(appBarView!)
+        view.addSubview(appBar)
+        appBar.addSubview(appBarView!
+        )
         view.addSubview(tableView)
     }
     
     //MARK: Setting the table view values and registering the cell for the table view , setting the row height
     func setTableViewValues(){
         tableView.register(ItemCellTableViewCell.self, forCellReuseIdentifier: ItemCellTableViewCell.identifier)
-        tableView.rowHeight = 100
+        tableView.rowHeight = 80
         
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
+     
     //MARK: Fetching the items to be shown in the table view
     func fetchItems(){
         loader.startLoading(view: view)
@@ -56,6 +68,9 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             DispatchQueue.main.async {
                 self.loader.stopLoading(view: self.view)
                 self.tableView.reloadData()
+                if self.pullToRefresh.isRefreshing {
+                    self.pullToRefresh.endRefreshing()
+                }
             }
         })
     }
@@ -73,10 +88,20 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.configureImageView(image: item?.image ?? "")
         cell.configureTitle(title: item?.name ?? "")
         cell.configureSubtitle(subtitle: item?.price ?? "")
+        cell.configureMRP()
         cell.configureSameDayShipping(shippingDay: item?.extra ?? "")
         return cell
     }
     
+    func setAppBarConstraints(){
+        appBar.translatesAutoresizingMaskIntoConstraints = false
+        appBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        appBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        appBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        appBar.heightAnchor.constraint(equalToConstant: 170).isActive = true
+        appBar.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        appBar.bottomAnchor.constraint(equalTo: tableView.topAnchor,constant: -30).isActive = true
+    }
     //MARK: Setting the constraints for the appbar and the tableview
     func setContraints(){
         appBarView!.translatesAutoresizingMaskIntoConstraints = false
@@ -84,24 +109,19 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 
         NSLayoutConstraint.activate([
             //App bar constraints
-            appBarView!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            appBarView!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            appBarView!.widthAnchor.constraint(equalToConstant: view.frame.size.width),
-            appBarView!.heightAnchor.constraint(equalToConstant: 80),
-            appBarView!.topAnchor.constraint(equalTo: view.topAnchor),
-            appBarView!.bottomAnchor.constraint(equalTo: tableView.topAnchor),
-            appBarView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            appBarView!.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
+            appBarView!.centerXAnchor.constraint(equalTo: appBar.centerXAnchor),
+            appBarView!.centerYAnchor.constraint(equalTo: appBar.centerYAnchor),
+            appBarView!.topAnchor.constraint(equalTo: appBar.topAnchor),
+            appBarView!.leadingAnchor.constraint(equalTo: appBar.leadingAnchor),
+            appBarView!.trailingAnchor.constraint(equalTo: appBar.trailingAnchor),
             //Table View constraints
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            tableView.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -appBarView!.frame.size.height),
-            tableView.topAnchor.constraint(equalTo: appBarView!.bottomAnchor,constant: -10),
+            tableView.topAnchor.constraint(equalTo: appBar.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
         )
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 class UIGridViewCell: UICollectionViewCell {
-     static let identifier = "ImageCollectionViewCell"
+    static let identifier = "ImageCollectionViewCell"
     //MARK: all the properties related to the cell
     private var itemImage = UIImageView()
     private var title = UILabel()
@@ -35,7 +35,7 @@ class UIGridViewCell: UICollectionViewCell {
     
     //MARK: Configuring the image corner radius
     public func configureImageView(image: String?){
-        itemImage.layer.cornerRadius = 10
+        itemImage.layer.cornerRadius = 2
         downloadImage(from: URL(string:image!)!)
     }
     
@@ -57,7 +57,6 @@ class UIGridViewCell: UICollectionViewCell {
     //MARK: Configuring the title properties
     func configureTitle(title: String){
         self.title.text = title
-        self.title.adjustsFontSizeToFitWidth = true
         self.title.font = UIFont.systemFont(ofSize: 14, weight: .light)
         self.title.textColor = UIColor.black
     }
@@ -65,8 +64,7 @@ class UIGridViewCell: UICollectionViewCell {
     //MARK: Configuring the subtitle properties
     func configureSubtitle(subtitle: String){
         self.subtitle.text = subtitle
-        self.subtitle.adjustsFontSizeToFitWidth = true
-        self.subtitle.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        self.subtitle.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         self.subtitle.textColor = UIColor.black
     }
     
@@ -81,30 +79,25 @@ class UIGridViewCell: UICollectionViewCell {
     //MARK: Configuring the image constraints
     func setImageViewConstraints(){
         itemImage.translatesAutoresizingMaskIntoConstraints = false
-        itemImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        itemImage.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        itemImage.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        itemImage.heightAnchor.constraint(equalToConstant: 100).isActive = true
         itemImage.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
         itemImage.widthAnchor.constraint(equalTo: itemImage.heightAnchor).isActive = true
-        itemImage.clipsToBounds = true
     }
     
     //MARK: Configuring the title constraints
     func setTitleConstraints(){
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
+        title.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         title.topAnchor.constraint(equalTo: itemImage.bottomAnchor, constant: 5).isActive = true
         title.bottomAnchor.constraint(equalTo: subtitle.topAnchor, constant: 0).isActive = true
-        title.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        title.clipsToBounds = true
     }
     
     //MARK: Configuring the subtitle constraints
     func setSubtitleConstraints(){
         subtitle.translatesAutoresizingMaskIntoConstraints = false
-        subtitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        subtitle.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 0).isActive = true
-        subtitle.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        subtitle.clipsToBounds = true
+        subtitle.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        subtitle.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 6).isActive = true
     }
     
     override func prepareForReuse() {

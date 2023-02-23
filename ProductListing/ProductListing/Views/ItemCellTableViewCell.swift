@@ -9,6 +9,13 @@ import UIKit
 
 class ItemCellTableViewCell: UITableViewCell {
     static let identifier = "CustomTableViewCell"
+    var cell = UIView()
+    var leftHalf = UIView()
+    var rightHalf = UIView()
+    
+    var titleRow = UIView()
+    var subtitleRow = UIView()
+    var dividerRow = UIView()
     
     var itemImage = UIImageView()
     var title = UILabel()
@@ -17,23 +24,65 @@ class ItemCellTableViewCell: UITableViewCell {
     var sameDayShipping = UILabel()
     var lineView = UIView()
     
+    func addCellContraint(){
+        cell.translatesAutoresizingMaskIntoConstraints = false
+        cell.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        cell.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 34).isActive = true
+        cell.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -34).isActive = true
+    }
+    
+    func leftHalfConstraints(){
+        leftHalf.translatesAutoresizingMaskIntoConstraints = false
+        leftHalf.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
+        leftHalf.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        leftHalf.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        leftHalf.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        leftHalf.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: -12).isActive = true
+    }
+    
+    func rightHalfConstraints(){
+        rightHalf.translatesAutoresizingMaskIntoConstraints = false
+        rightHalf.leadingAnchor.constraint(equalTo: leftHalf.trailingAnchor,constant: 16).isActive = true
+        rightHalf.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+        rightHalf.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        rightHalf.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        rightHalf.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+        
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(itemImage)
-        addSubview(title)
-        addSubview(subtitle)
-        addSubview(sameDayShipping)
-        addSubview(lineView)
+        addSubview(cell)
+        
+        cell.addSubview(leftHalf)
+        cell.addSubview(rightHalf)
+        
+        leftHalf.addSubview(itemImage)
+        rightHalf.addSubview(titleRow)
+        rightHalf.addSubview(subtitleRow)
+        rightHalf.addSubview(lineView)
 
+        titleRow.addSubview(title)
+        subtitleRow.addSubview(subtitle)
+        subtitleRow.addSubview(mrp)
+        subtitleRow.addSubview(sameDayShipping)
         
         configureLineView()
-        
+
+        addCellContraint()
+        leftHalfConstraints()
+        rightHalfConstraints()
         setImageConstraints()
+        setTitleRowConstraints()
+
+        subtitleRowConstraints()
         setTitleConstraints()
+        setMRPConstraints()
         setSubtitleConstraints()
         setSameDayShippingConstraints()
         setLineViewConstraints()
+        
+        
     }
     
     required init?(coder: NSCoder) {
@@ -64,26 +113,28 @@ class ItemCellTableViewCell: UITableViewCell {
     //MARK: Configuring the title properties
     func configureTitle(title: String){
         self.title.text = title
-        self.title.adjustsFontSizeToFitWidth = true
-        self.title.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        self.title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         self.title.textColor = UIColor.black
+    }
+    
+    func configureMRP(){
+        mrp.text = "MRP:"
+        mrp.textColor = UIColor(named: "mrpColor")
+        mrp.font = UIFont.systemFont(ofSize: 14, weight: .light)
     }
     
     //MARK: Configuring the subtitle properties
     func configureSubtitle(subtitle: String){
-        self.subtitle.text = subtitle
-        self.subtitle.adjustsFontSizeToFitWidth = true
+        self.subtitle.text = subtitle.trimmingCharacters(in: [" "])
         self.subtitle.font = UIFont.systemFont(ofSize: 14, weight: .light)
         self.subtitle.textColor = UIColor.black
     }
     
     //MARK: Configuring the same day shipping properties
     func configureSameDayShipping(shippingDay: String?){
-        self.sameDayShipping.text = shippingDay
-        self.sameDayShipping.adjustsFontSizeToFitWidth = true
-        self.sameDayShipping.font = sameDayShipping.font.withSize(16)
-        self.sameDayShipping.textColor = UIColor.lightGray
-        
+        sameDayShipping.text = shippingDay
+        sameDayShipping.font = sameDayShipping.font.withSize(14)
+        sameDayShipping.textColor = UIColor.lightGray
     }
     
     //MARK: Configuring the line view
@@ -95,55 +146,63 @@ class ItemCellTableViewCell: UITableViewCell {
     //MARK: Configuring the image constraints
     func setImageConstraints(){
         itemImage.translatesAutoresizingMaskIntoConstraints = false
-        itemImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        itemImage.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        itemImage.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-        itemImage.widthAnchor.constraint(equalTo: itemImage.heightAnchor).isActive = true
-        itemImage.clipsToBounds = true
+        itemImage.leadingAnchor.constraint(equalTo: leftHalf.leadingAnchor).isActive = true
+        itemImage.heightAnchor.constraint(equalTo: leftHalf.heightAnchor).isActive = true
+        itemImage.widthAnchor.constraint(equalTo: leftHalf.widthAnchor).isActive = true
+        itemImage.topAnchor.constraint(equalTo: leftHalf.topAnchor).isActive = true
+    }
+    
+   func setTitleRowConstraints(){
+       titleRow.translatesAutoresizingMaskIntoConstraints = false
+       titleRow.leadingAnchor.constraint(equalTo: rightHalf.leadingAnchor).isActive = true
+       titleRow.trailingAnchor.constraint(equalTo: rightHalf.trailingAnchor).isActive = true
+       titleRow.topAnchor.constraint(equalTo: rightHalf.topAnchor).isActive = true
+       titleRow.heightAnchor.constraint(equalToConstant: 20).isActive = true
+   }
+    
+    func subtitleRowConstraints(){
+        subtitleRow.translatesAutoresizingMaskIntoConstraints = false
+        subtitleRow.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        subtitleRow.topAnchor.constraint(equalTo: titleRow.bottomAnchor,constant: 4).isActive = true
+        subtitleRow.leadingAnchor.constraint(equalTo: rightHalf.leadingAnchor).isActive = true
+        subtitleRow.trailingAnchor.constraint(equalTo: rightHalf.trailingAnchor).isActive = true
     }
     
     //MARK: Configuring the title constraints
     func setTitleConstraints(){
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.leadingAnchor.constraint(equalTo: itemImage.trailingAnchor,constant: 10).isActive = true
-        title.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-        title.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        title.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -12).isActive = true
+        title.leadingAnchor.constraint(equalTo: titleRow.leadingAnchor).isActive = true
+        title.topAnchor.constraint(equalTo: titleRow.topAnchor).isActive = true
     }
     
     //MARK: Configuring the MRP constraints
     func setMRPConstraints(){
         mrp.translatesAutoresizingMaskIntoConstraints = false
-        mrp.leadingAnchor.constraint(equalTo: itemImage.trailingAnchor,constant: 10).isActive = true
-        mrp.topAnchor.constraint(equalTo: title.bottomAnchor,constant: 2).isActive = true
-        mrp.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        mrp.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -12).isActive = true
+        mrp.leadingAnchor.constraint(equalTo: subtitleRow.leadingAnchor).isActive = true
+        mrp.topAnchor.constraint(equalTo: subtitleRow.topAnchor,constant: 2).isActive = true
     }
     
     //MARK: Configuring the subtitle constraints
     func setSubtitleConstraints(){
         subtitle.translatesAutoresizingMaskIntoConstraints = false
-        subtitle.leadingAnchor.constraint(equalTo: itemImage.trailingAnchor,constant: 10).isActive = true
-        subtitle.topAnchor.constraint(equalTo: title.bottomAnchor,constant: 2).isActive = true
-        subtitle.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        subtitle.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -12).isActive = true
+        subtitle.leadingAnchor.constraint(equalTo: mrp.trailingAnchor,constant: 4).isActive = true
+        subtitle.topAnchor.constraint(equalTo: subtitleRow.topAnchor,constant: 2).isActive = true
     }
     
     //MARK: Configuring the lineView constraints
     func setLineViewConstraints(){
         lineView.translatesAutoresizingMaskIntoConstraints = false
-        lineView.leadingAnchor.constraint(equalTo: itemImage.trailingAnchor,constant: 10).isActive = true
-        lineView.topAnchor.constraint(equalTo: subtitle.bottomAnchor,constant: 2).isActive = true
-        lineView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        lineView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -8).isActive = true
+        lineView.leadingAnchor.constraint(equalTo: rightHalf.leadingAnchor).isActive = true
+        lineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        lineView.trailingAnchor.constraint(equalTo: rightHalf.trailingAnchor).isActive = true
+        lineView.bottomAnchor.constraint(equalTo: rightHalf.bottomAnchor,constant: -8).isActive = true
     }
     
     //MARK: Configuring the same day shipping constraints
     func setSameDayShippingConstraints(){
         sameDayShipping.translatesAutoresizingMaskIntoConstraints = false
-        sameDayShipping.heightAnchor.constraint(equalToConstant: 14).isActive = true
-        sameDayShipping.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
-        sameDayShipping.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        sameDayShipping.topAnchor.constraint(equalTo: subtitleRow.topAnchor,constant: 2).isActive = true
+        sameDayShipping.trailingAnchor.constraint(equalTo: subtitleRow.trailingAnchor).isActive = true
     }
     
 }

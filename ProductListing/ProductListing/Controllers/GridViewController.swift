@@ -17,6 +17,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     var loader = LoaderView()
     var items: [StoreItem]?
     
+    private var appBar = UIView()
     var appBarView = AppBarController().view
     
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
         view.backgroundColor = .systemBackground
         addSubViews()
         setContraints()
+        setAppBarConstraints()
         gridView.register(UIGridViewCell.self, forCellWithReuseIdentifier: UIGridViewCell.identifier)
         gridView.contentSize = CGSize(width: 100, height: 100)
         fetchItems()
@@ -34,8 +36,19 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     //MARK: Adding the sub views for the Grid view
     func addSubViews(){
         loader = LoaderView(frame: view.frame)
-        view.addSubview(appBarView!)
+        view.addSubview(appBar)
+        appBar.addSubview(appBarView!)
         view.addSubview(gridView)
+    }
+    
+    func setAppBarConstraints(){
+        appBar.translatesAutoresizingMaskIntoConstraints = false
+        appBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        appBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        appBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        appBar.heightAnchor.constraint(equalToConstant: 170).isActive = true
+        appBar.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        appBar.bottomAnchor.constraint(equalTo: gridView.topAnchor,constant: -30).isActive = true
     }
     
     //MARK: Setting the constraints for the APP bar and the grid view
@@ -45,24 +58,20 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
 
         NSLayoutConstraint.activate([
             //App bar constraints
-            appBarView!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            appBarView!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            appBarView!.widthAnchor.constraint(equalToConstant: view.frame.size.width),
-            appBarView!.heightAnchor.constraint(equalToConstant: 80),
-            appBarView!.topAnchor.constraint(equalTo: view.topAnchor),
-            appBarView!.bottomAnchor.constraint(equalTo: gridView.topAnchor),
-            appBarView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            appBarView!.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            appBarView!.centerXAnchor.constraint(equalTo: appBar.centerXAnchor),
+            appBarView!.centerYAnchor.constraint(equalTo: appBar.centerYAnchor),
+            appBarView!.topAnchor.constraint(equalTo: appBar.topAnchor),
+            appBarView!.leadingAnchor.constraint(equalTo: appBar.leadingAnchor),
+            appBarView!.trailingAnchor.constraint(equalTo: appBar.trailingAnchor),
             
             //Grid View constraints
             gridView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gridView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             gridView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            gridView.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -appBarView!.frame.size.height),
-            gridView.topAnchor.constraint(equalTo: appBarView!.bottomAnchor,constant: -10),
+            gridView.topAnchor.constraint(equalTo: appBar.bottomAnchor),
             gridView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
-            gridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            gridView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            gridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 10),
+            gridView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: 10),
         ]
         )
     }
@@ -103,7 +112,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     //MARK: Setting the inter item spacing between the cells
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 4
+        return 1
     }
     
     //MARK: Setting the line spacing for the section
