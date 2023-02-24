@@ -8,15 +8,33 @@
 import Foundation
 import UIKit
 
-class AppBarController : UIViewController, UISearchBarDelegate {
-    private var searchBar: UISearchBar = UISearchBar()
+protocol AppBarControllerDelegate{
+    func onTextChanged(text: String)
+}
+
+class AppBarController : UIViewController, UISearchBarDelegate  {
+    var searchBar : UISearchBar = {
+        let uisb = UISearchBar()
+        return uisb
+    }()
     private var exploreLabel: UILabel = UILabel()
     private var filterLabel: UILabel = UILabel()
     private var firstRow = UIView()
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
-        print(searchBar.text!)
+    var appBarControllerDelegate: AppBarControllerDelegate?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        searchBar.delegate = self
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
+        print(textSearched)
+        print("sdfds")
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("search bar button clicked")
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +45,8 @@ class AppBarController : UIViewController, UISearchBarDelegate {
         // properties of exploreLabel
         setAppExploreProperties()
         // properties of searchBar
-        setSearchBarProperties()
-        
+//        setSearchBarProperties()
+//        searchBar.delegate = self
         // Adding views to subview
         view.addSubview(firstRow)
         view.addSubview(searchBar)
@@ -57,7 +75,7 @@ class AppBarController : UIViewController, UISearchBarDelegate {
     
     //MARK: Setting the properties of the search bar in the Appbar
     func setSearchBarProperties(){
-        searchBar.delegate = self
+        
         searchBar.searchTextField.backgroundColor = UIColor.clear
         searchBar.layer.cornerRadius = 30
         searchBar.placeholder = AppStrings.search

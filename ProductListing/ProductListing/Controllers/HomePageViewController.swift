@@ -7,10 +7,14 @@
 
 import UIKit
 
-class HomePageViewController: UITabBarController {
+class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISearchBarDelegate {
     let selectedColor = UIColor.blue
     let deselectedColor = UIColor.gray
-    var appBarController = AppBarController().view
+    var appBarController = AppBarController()
+    
+    
+    
+    
     let tabBarNames = [
       "List",
       "Grid",
@@ -24,12 +28,8 @@ class HomePageViewController: UITabBarController {
     override func viewDidLoad(){
         super.viewDidLoad()
         self.delegate = self
-        view.addSubview(appBarController!)
-//        appBarController?.translatesAutoresizingMaskIntoConstraints = false
-//        appBarController?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        appBarController?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        appBarController?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        appBarController?.heightAnchor.constraint(equalToConstant: 200).isActive = true
+//        AppBarController().appBarControllerDelegate =  self
+        view.addSubview(appBarController.view)
         tabBar.isTranslucent = true
         tabBar.tintColor = deselectedColor
         tabBar.unselectedItemTintColor = deselectedColor
@@ -59,6 +59,10 @@ class HomePageViewController: UITabBarController {
         setViewControllers(controllers, animated: false)
         
         selectedViewController = centerPageViewController
+    }
+    
+    func onTextChanged(text: String) {
+        
     }
     
     private func createCenterPageViewController() -> UIPageViewController? {
