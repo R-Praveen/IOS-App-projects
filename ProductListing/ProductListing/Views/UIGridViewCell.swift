@@ -80,7 +80,7 @@ class UIGridViewCell: UICollectionViewCell {
     func setImageViewConstraints(){
         itemImageView.translatesAutoresizingMaskIntoConstraints = false
         itemImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        itemImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        itemImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         itemImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
         itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor).isActive = true
     }

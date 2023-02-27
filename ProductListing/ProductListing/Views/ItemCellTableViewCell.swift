@@ -24,6 +24,7 @@ class ItemCellTableViewCell: UITableViewCell {
     var sameDayShippingLabel = UILabel()
     var lineView = UIView()
     
+    //Adding contraints for the individual cell of the item view
     func addCellContraint(){
         cell.translatesAutoresizingMaskIntoConstraints = false
         cell.heightAnchor.constraint(equalToConstant: 70).isActive = true
@@ -31,6 +32,7 @@ class ItemCellTableViewCell: UITableViewCell {
         cell.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -34).isActive = true
     }
     
+    //Setting the image section view constraints
     func imageSectionViewConstraints(){
         imageSectionView.translatesAutoresizingMaskIntoConstraints = false
         imageSectionView.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
@@ -40,6 +42,7 @@ class ItemCellTableViewCell: UITableViewCell {
         imageSectionView.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: -12).isActive = true
     }
     
+    //Setting the content section view constraints
     func contentSectionViewConstraints(){
         contentSectionView.translatesAutoresizingMaskIntoConstraints = false
         contentSectionView.leadingAnchor.constraint(equalTo: imageSectionView.trailingAnchor,constant: 16).isActive = true
@@ -57,32 +60,35 @@ class ItemCellTableViewCell: UITableViewCell {
         cell.addSubview(imageSectionView)
         cell.addSubview(contentSectionView)
         
+        //Adding the image and content section subviews
         imageSectionView.addSubview(itemImageView)
         contentSectionView.addSubview(titleLabelSectionView)
         contentSectionView.addSubview(subtitleLabelLabelSectionView)
         contentSectionView.addSubview(lineView)
-
+        
+       //Adding title and subtitle subviews
         titleLabelSectionView.addSubview(titleLabel)
         subtitleLabelLabelSectionView.addSubview(subtitleLabel)
         subtitleLabelLabelSectionView.addSubview(mrpLabel)
         subtitleLabelLabelSectionView.addSubview(sameDayShippingLabel)
         
+        //Configuring the line view
         configureLineView()
-
+        
+        //Setting the image and content section view constraints.
         addCellContraint()
         imageSectionViewConstraints()
         contentSectionViewConstraints()
         setImageConstraints()
         settitleLabelSectionViewConstraints()
 
+        //Setting the title and subtitle view contraints.
         subtitleLabelLabelSectionViewConstraints()
         settitleLabelConstraints()
         setmrpLabelConstraints()
         setsubtitleLabelLabelConstraints()
         setsameDayShippingLabelConstraints()
         setLineViewConstraints()
-        
-        
     }
     
     required init?(coder: NSCoder) {
@@ -117,6 +123,7 @@ class ItemCellTableViewCell: UITableViewCell {
         self.titleLabel.textColor = UIColor.black
     }
     
+    //Configuring the MRP label
     func configuremrpLabel(){
         mrpLabel.text = "MRP:"
         mrpLabel.textColor = UIColor(named: "mrpLabelColor")

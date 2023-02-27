@@ -27,6 +27,14 @@ class SearchUtils{
                 {
                     filteredItems.append(storeItem)
                 }
+                else if storeItem.extra?.contains(text) ?? false
+                {
+                    filteredItems.append(storeItem)
+                }
+                else if storeItem.price?.contains(text) ?? false
+                {
+                    filteredItems.append(storeItem)
+                }
             })
         })
         

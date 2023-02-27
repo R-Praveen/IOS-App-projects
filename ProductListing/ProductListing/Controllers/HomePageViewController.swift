@@ -11,6 +11,7 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
     let selectedColor = UIColor.gray
     let deselectedColor = UIColor.gray
     var appBarController = AppBarController()
+    //Properties for all the tab bars
     let tabOne = ListViewController()
     let tabTwo = GridViewController()
     let tabThree = EmptyPageController()
@@ -24,7 +25,10 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
     override func viewDidLoad(){
         super.viewDidLoad()
         self.delegate = self
+        tabBar.itemWidth = 76
+        tabBar.isTranslucent = true
         appBarController.appBarControllerDelegate = self
+        view.backgroundColor = .white
         view.addSubview(appBarController.view)
         
         setUpControllers()
@@ -33,12 +37,13 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
     }
     
     
-    private func tabbarItem(at index: Int) -> UITabBarItem {
+    private func tabbarItem() -> UITabBarItem {
         let tabBarItem = UITabBarItem(title: nil, image: tabBarImage, selectedImage: nil)
-        tabBarItem.imageInsets = UIEdgeInsets(top: 14.5, left: 0, bottom: -14.5, right: 0)
+        tabBarItem.imageInsets = UIEdgeInsets(top: 8.5, left: 0, bottom: -8.5, right: 0)
         return tabBarItem
     }
     
+    //MARK: Setting up the controllers of the tabs
     private func setUpControllers(){
         guard let centerPageViewController = createCenterPageViewController() else { return }
         
@@ -56,12 +61,14 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
         selectedViewController = centerPageViewController
     }
     
+    //MARK: Listening to search bar and updating the search results
     func onTextChanged(text: String) {
         let items = searchUtils.searchItems(text: text)
         tabOne.updateTableViewSearchResults(storeItems: items)
         tabTwo.updateTableViewSearchResults(storeItems: items)
     }
     
+    //MARK: Creating the current page controller
     private func createCenterPageViewController() -> UIPageViewController? {
         tabOne.view.tag = 0
         tabTwo.view.tag = 1
@@ -71,13 +78,14 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
         let pageViewController = PageViewController()
         
         pageViewController.pages = [tabOne, tabTwo,tabThree,tabFour,tabFive]
-        pageViewController.tabBarItem = tabbarItem(at: 1)
+        pageViewController.tabBarItem = tabbarItem()
         pageViewController.view.tag = 1
         pageViewController.swipeDelegate = self
         
         return pageViewController
     }
     
+    //MARK: Controls the selection of page based on index
     private func selectPage(at index: Int) {
         guard let viewController = self.viewControllers?[index] else { return }
         self.handleTabbarItemChange(viewController: viewController)
@@ -85,13 +93,15 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
         PageViewController.selectPage(at: index)
     }
     
+    //MARK: Creating the placeholder view for the tab
     private func createPlaceholderViewController(forIndex index: Int) -> UIViewController {
         let emptyViewController = UIViewController()
-        emptyViewController.tabBarItem = tabbarItem(at: index)
+        emptyViewController.tabBarItem = tabbarItem()
         emptyViewController.view.tag = index
         return emptyViewController
     }
     
+    //MARK: Listening to the tab bar item change.
     private func handleTabbarItemChange(viewController: UIViewController) {
         guard let viewControllers = self.viewControllers else { return }
         let selectedIndex = viewController.view.tag
@@ -114,6 +124,7 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
     }
 }
 
+//Extension for the UITabBarControler delegate
 extension HomePageViewController: UITabBarControllerDelegate,PageViewControllerDelegate{
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         self.selectPage(at: viewController.view.tag)
