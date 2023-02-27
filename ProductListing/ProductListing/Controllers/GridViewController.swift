@@ -13,7 +13,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
-    var viewModel = ViewModel()
+    var viewModel = ViewModel(networkService: NetworkService(), coreDataHelper: CoreDataHelper(managedObjectContext: CoreDataStack.shared.mainContext))
     var loader = LoaderView()
     var items: [StoreItem]?
     
@@ -34,6 +34,12 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
         loader = LoaderView(frame: view.frame)
         view.addSubview(gridView)
     }
+    
+    func updateTableViewSearchResults(storeItems: [StoreItem]){
+        self.items = storeItems
+        gridView.reloadData()
+    }
+    
     
     //MARK: Setting the constraints for the APP bar and the grid view
     func setContraints(){
@@ -74,8 +80,8 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = gridView.dequeueReusableCell(withReuseIdentifier: UIGridViewCell.identifier, for: indexPath) as! UIGridViewCell
         let item = items?[indexPath.row]
-        cell.configureTitle(title: item?.name ?? "")
-        cell.configureSubtitle(subtitle: item?.price ?? "")
+        cell.configureTitle(titleLabel: item?.name ?? "")
+        cell.configureSubtitle(subtitleLabel: item?.price ?? "")
         cell.configureImageView(image: item?.image ?? "")
 
         return cell

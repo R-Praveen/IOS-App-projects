@@ -10,18 +10,18 @@ import UIKit
 class ItemCellTableViewCell: UITableViewCell {
     static let identifier = "CustomTableViewCell"
     var cell = UIView()
-    var leftHalf = UIView()
-    var rightHalf = UIView()
+    var imageSectionView = UIView()
+    var contentSectionView = UIView()
     
-    var titleRow = UIView()
-    var subtitleRow = UIView()
-    var dividerRow = UIView()
+    var titleLabelSectionView = UIView()
+    var subtitleLabelLabelSectionView = UIView()
+    var dividerSectionView = UIView()
     
-    var itemImage = UIImageView()
-    var title = UILabel()
-    var subtitle = UILabel()
-    var mrp = UILabel()
-    var sameDayShipping = UILabel()
+    var itemImageView = UIImageView()
+    var titleLabel = UILabel()
+    var subtitleLabel = UILabel()
+    var mrpLabel = UILabel()
+    var sameDayShippingLabel = UILabel()
     var lineView = UIView()
     
     func addCellContraint(){
@@ -31,22 +31,22 @@ class ItemCellTableViewCell: UITableViewCell {
         cell.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -34).isActive = true
     }
     
-    func leftHalfConstraints(){
-        leftHalf.translatesAutoresizingMaskIntoConstraints = false
-        leftHalf.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
-        leftHalf.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        leftHalf.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        leftHalf.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        leftHalf.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: -12).isActive = true
+    func imageSectionViewConstraints(){
+        imageSectionView.translatesAutoresizingMaskIntoConstraints = false
+        imageSectionView.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
+        imageSectionView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        imageSectionView.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        imageSectionView.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        imageSectionView.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: -12).isActive = true
     }
     
-    func rightHalfConstraints(){
-        rightHalf.translatesAutoresizingMaskIntoConstraints = false
-        rightHalf.leadingAnchor.constraint(equalTo: leftHalf.trailingAnchor,constant: 16).isActive = true
-        rightHalf.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-        rightHalf.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        rightHalf.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        rightHalf.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+    func contentSectionViewConstraints(){
+        contentSectionView.translatesAutoresizingMaskIntoConstraints = false
+        contentSectionView.leadingAnchor.constraint(equalTo: imageSectionView.trailingAnchor,constant: 16).isActive = true
+        contentSectionView.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+        contentSectionView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        contentSectionView.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        contentSectionView.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
         
     }
     
@@ -54,32 +54,32 @@ class ItemCellTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(cell)
         
-        cell.addSubview(leftHalf)
-        cell.addSubview(rightHalf)
+        cell.addSubview(imageSectionView)
+        cell.addSubview(contentSectionView)
         
-        leftHalf.addSubview(itemImage)
-        rightHalf.addSubview(titleRow)
-        rightHalf.addSubview(subtitleRow)
-        rightHalf.addSubview(lineView)
+        imageSectionView.addSubview(itemImageView)
+        contentSectionView.addSubview(titleLabelSectionView)
+        contentSectionView.addSubview(subtitleLabelLabelSectionView)
+        contentSectionView.addSubview(lineView)
 
-        titleRow.addSubview(title)
-        subtitleRow.addSubview(subtitle)
-        subtitleRow.addSubview(mrp)
-        subtitleRow.addSubview(sameDayShipping)
+        titleLabelSectionView.addSubview(titleLabel)
+        subtitleLabelLabelSectionView.addSubview(subtitleLabel)
+        subtitleLabelLabelSectionView.addSubview(mrpLabel)
+        subtitleLabelLabelSectionView.addSubview(sameDayShippingLabel)
         
         configureLineView()
 
         addCellContraint()
-        leftHalfConstraints()
-        rightHalfConstraints()
+        imageSectionViewConstraints()
+        contentSectionViewConstraints()
         setImageConstraints()
-        setTitleRowConstraints()
+        settitleLabelSectionViewConstraints()
 
-        subtitleRowConstraints()
-        setTitleConstraints()
-        setMRPConstraints()
-        setSubtitleConstraints()
-        setSameDayShippingConstraints()
+        subtitleLabelLabelSectionViewConstraints()
+        settitleLabelConstraints()
+        setmrpLabelConstraints()
+        setsubtitleLabelLabelConstraints()
+        setsameDayShippingLabelConstraints()
         setLineViewConstraints()
         
         
@@ -91,7 +91,7 @@ class ItemCellTableViewCell: UITableViewCell {
     
     //MARK: Configuring the image corner radius
     public func configureImageView(image: String?){
-        itemImage.layer.cornerRadius = 10
+        itemImageView.layer.cornerRadius = 10
         downloadImage(from: URL(string:image!)!)
     }
     
@@ -100,7 +100,7 @@ class ItemCellTableViewCell: UITableViewCell {
         getData(from: url) { data, response, error in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async() { [weak self] in
-                self?.itemImage.image = UIImage(data: data)
+                self?.itemImageView.image = UIImage(data: data)
             }
         }
     }
@@ -110,31 +110,31 @@ class ItemCellTableViewCell: UITableViewCell {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
-    //MARK: Configuring the title properties
-    func configureTitle(title: String){
-        self.title.text = title
-        self.title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        self.title.textColor = UIColor.black
+    //MARK: Configuring the titleLabel properties
+    func configuretitleLabel(titleLabel: String){
+        self.titleLabel.text = titleLabel
+        self.titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        self.titleLabel.textColor = UIColor.black
     }
     
-    func configureMRP(){
-        mrp.text = "MRP:"
-        mrp.textColor = UIColor(named: "mrpColor")
-        mrp.font = UIFont.systemFont(ofSize: 14, weight: .light)
+    func configuremrpLabel(){
+        mrpLabel.text = "MRP:"
+        mrpLabel.textColor = UIColor(named: "mrpLabelColor")
+        mrpLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
     }
     
-    //MARK: Configuring the subtitle properties
-    func configureSubtitle(subtitle: String){
-        self.subtitle.text = subtitle.trimmingCharacters(in: [" "])
-        self.subtitle.font = UIFont.systemFont(ofSize: 14, weight: .light)
-        self.subtitle.textColor = UIColor.black
+    //MARK: Configuring the subtitleLabel properties
+    func configuresubtitleLabel(subtitleLabel: String){
+        self.subtitleLabel.text = subtitleLabel.trimmingCharacters(in: [" "])
+        self.subtitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        self.subtitleLabel.textColor = UIColor.black
     }
     
     //MARK: Configuring the same day shipping properties
-    func configureSameDayShipping(shippingDay: String?){
-        sameDayShipping.text = shippingDay
-        sameDayShipping.font = sameDayShipping.font.withSize(14)
-        sameDayShipping.textColor = UIColor.lightGray
+    func configuresameDayShippingLabel(shippingDay: String?){
+        sameDayShippingLabel.text = shippingDay
+        sameDayShippingLabel.font = sameDayShippingLabel.font.withSize(14)
+        sameDayShippingLabel.textColor = UIColor.lightGray
     }
     
     //MARK: Configuring the line view
@@ -145,64 +145,64 @@ class ItemCellTableViewCell: UITableViewCell {
     
     //MARK: Configuring the image constraints
     func setImageConstraints(){
-        itemImage.translatesAutoresizingMaskIntoConstraints = false
-        itemImage.leadingAnchor.constraint(equalTo: leftHalf.leadingAnchor).isActive = true
-        itemImage.heightAnchor.constraint(equalTo: leftHalf.heightAnchor).isActive = true
-        itemImage.widthAnchor.constraint(equalTo: leftHalf.widthAnchor).isActive = true
-        itemImage.topAnchor.constraint(equalTo: leftHalf.topAnchor).isActive = true
+        itemImageView.translatesAutoresizingMaskIntoConstraints = false
+        itemImageView.leadingAnchor.constraint(equalTo: imageSectionView.leadingAnchor).isActive = true
+        itemImageView.heightAnchor.constraint(equalTo: imageSectionView.heightAnchor).isActive = true
+        itemImageView.widthAnchor.constraint(equalTo: imageSectionView.widthAnchor).isActive = true
+        itemImageView.topAnchor.constraint(equalTo: imageSectionView.topAnchor).isActive = true
     }
     
-   func setTitleRowConstraints(){
-       titleRow.translatesAutoresizingMaskIntoConstraints = false
-       titleRow.leadingAnchor.constraint(equalTo: rightHalf.leadingAnchor).isActive = true
-       titleRow.trailingAnchor.constraint(equalTo: rightHalf.trailingAnchor).isActive = true
-       titleRow.topAnchor.constraint(equalTo: rightHalf.topAnchor).isActive = true
-       titleRow.heightAnchor.constraint(equalToConstant: 20).isActive = true
+   func settitleLabelSectionViewConstraints(){
+       titleLabelSectionView.translatesAutoresizingMaskIntoConstraints = false
+       titleLabelSectionView.leadingAnchor.constraint(equalTo: contentSectionView.leadingAnchor).isActive = true
+       titleLabelSectionView.trailingAnchor.constraint(equalTo: contentSectionView.trailingAnchor).isActive = true
+       titleLabelSectionView.topAnchor.constraint(equalTo: contentSectionView.topAnchor).isActive = true
+       titleLabelSectionView.heightAnchor.constraint(equalToConstant: 20).isActive = true
    }
     
-    func subtitleRowConstraints(){
-        subtitleRow.translatesAutoresizingMaskIntoConstraints = false
-        subtitleRow.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        subtitleRow.topAnchor.constraint(equalTo: titleRow.bottomAnchor,constant: 4).isActive = true
-        subtitleRow.leadingAnchor.constraint(equalTo: rightHalf.leadingAnchor).isActive = true
-        subtitleRow.trailingAnchor.constraint(equalTo: rightHalf.trailingAnchor).isActive = true
+    func subtitleLabelLabelSectionViewConstraints(){
+        subtitleLabelLabelSectionView.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabelLabelSectionView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        subtitleLabelLabelSectionView.topAnchor.constraint(equalTo: titleLabelSectionView.bottomAnchor,constant: 4).isActive = true
+        subtitleLabelLabelSectionView.leadingAnchor.constraint(equalTo: contentSectionView.leadingAnchor).isActive = true
+        subtitleLabelLabelSectionView.trailingAnchor.constraint(equalTo: contentSectionView.trailingAnchor).isActive = true
     }
     
-    //MARK: Configuring the title constraints
-    func setTitleConstraints(){
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.leadingAnchor.constraint(equalTo: titleRow.leadingAnchor).isActive = true
-        title.topAnchor.constraint(equalTo: titleRow.topAnchor).isActive = true
+    //MARK: Configuring the titleLabel constraints
+    func settitleLabelConstraints(){
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.leadingAnchor.constraint(equalTo: titleLabelSectionView.leadingAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: titleLabelSectionView.topAnchor).isActive = true
     }
     
-    //MARK: Configuring the MRP constraints
-    func setMRPConstraints(){
-        mrp.translatesAutoresizingMaskIntoConstraints = false
-        mrp.leadingAnchor.constraint(equalTo: subtitleRow.leadingAnchor).isActive = true
-        mrp.topAnchor.constraint(equalTo: subtitleRow.topAnchor,constant: 2).isActive = true
+    //MARK: Configuring the mrpLabel constraints
+    func setmrpLabelConstraints(){
+        mrpLabel.translatesAutoresizingMaskIntoConstraints = false
+        mrpLabel.leadingAnchor.constraint(equalTo: subtitleLabelLabelSectionView.leadingAnchor).isActive = true
+        mrpLabel.topAnchor.constraint(equalTo: subtitleLabelLabelSectionView.topAnchor,constant: 2).isActive = true
     }
     
-    //MARK: Configuring the subtitle constraints
-    func setSubtitleConstraints(){
-        subtitle.translatesAutoresizingMaskIntoConstraints = false
-        subtitle.leadingAnchor.constraint(equalTo: mrp.trailingAnchor,constant: 4).isActive = true
-        subtitle.topAnchor.constraint(equalTo: subtitleRow.topAnchor,constant: 2).isActive = true
+    //MARK: Configuring the subtitleLabel constraints
+    func setsubtitleLabelLabelConstraints(){
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.leadingAnchor.constraint(equalTo: mrpLabel.trailingAnchor,constant: 4).isActive = true
+        subtitleLabel.topAnchor.constraint(equalTo: subtitleLabelLabelSectionView.topAnchor,constant: 2).isActive = true
     }
     
     //MARK: Configuring the lineView constraints
     func setLineViewConstraints(){
         lineView.translatesAutoresizingMaskIntoConstraints = false
-        lineView.leadingAnchor.constraint(equalTo: rightHalf.leadingAnchor).isActive = true
+        lineView.leadingAnchor.constraint(equalTo: contentSectionView.leadingAnchor).isActive = true
         lineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        lineView.trailingAnchor.constraint(equalTo: rightHalf.trailingAnchor).isActive = true
-        lineView.bottomAnchor.constraint(equalTo: rightHalf.bottomAnchor,constant: -8).isActive = true
+        lineView.trailingAnchor.constraint(equalTo: contentSectionView.trailingAnchor).isActive = true
+        lineView.bottomAnchor.constraint(equalTo: contentSectionView.bottomAnchor,constant: -8).isActive = true
     }
     
     //MARK: Configuring the same day shipping constraints
-    func setSameDayShippingConstraints(){
-        sameDayShipping.translatesAutoresizingMaskIntoConstraints = false
-        sameDayShipping.topAnchor.constraint(equalTo: subtitleRow.topAnchor,constant: 2).isActive = true
-        sameDayShipping.trailingAnchor.constraint(equalTo: subtitleRow.trailingAnchor).isActive = true
+    func setsameDayShippingLabelConstraints(){
+        sameDayShippingLabel.translatesAutoresizingMaskIntoConstraints = false
+        sameDayShippingLabel.topAnchor.constraint(equalTo: subtitleLabelLabelSectionView.topAnchor,constant: 2).isActive = true
+        sameDayShippingLabel.trailingAnchor.constraint(equalTo: subtitleLabelLabelSectionView.trailingAnchor).isActive = true
     }
     
 }

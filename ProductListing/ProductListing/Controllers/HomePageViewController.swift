@@ -8,35 +8,24 @@
 import UIKit
 
 class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISearchBarDelegate {
-    let selectedColor = UIColor.blue
+    let selectedColor = UIColor.gray
     let deselectedColor = UIColor.gray
     var appBarController = AppBarController()
+    let tabOne = ListViewController()
+    let tabTwo = GridViewController()
+    let tabThree = EmptyPageController()
+    let tabFour = EmptyPageController()
+    let tabFive = EmptyPageController()
+
+    let searchUtils = SearchUtils(viewModel: ViewModel(networkService: NetworkService(), coreDataHelper: CoreDataHelper(managedObjectContext: CoreDataStack.shared.mainContext)))
     
-    
-    
-    
-    let tabBarNames = [
-      "List",
-      "Grid",
-    ]
-    
-    let tabBarImages = [
-        UIImage(systemName: "list.bullet.rectangle"),
-        UIImage(systemName: "square.grid.2x2")
-    ]
+    let tabBarImage = UIImage(named: "TabBarIconImage")
     
     override func viewDidLoad(){
         super.viewDidLoad()
         self.delegate = self
-//        AppBarController().appBarControllerDelegate =  self
+        appBarController.appBarControllerDelegate = self
         view.addSubview(appBarController.view)
-        tabBar.isTranslucent = true
-        tabBar.tintColor = deselectedColor
-        tabBar.unselectedItemTintColor = deselectedColor
-        tabBar.barTintColor = UIColor.white.withAlphaComponent(0.92)
-        tabBar.itemSpacing = 10.0
-        tabBar.itemWidth = 76.0
-        tabBar.itemPositioning = .centered
         
         setUpControllers()
         
@@ -45,7 +34,9 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
     
     
     private func tabbarItem(at index: Int) -> UITabBarItem {
-        return UITabBarItem(title: tabBarNames[index], image: tabBarImages[index], selectedImage: nil)
+        let tabBarItem = UITabBarItem(title: nil, image: tabBarImage, selectedImage: nil)
+        tabBarItem.imageInsets = UIEdgeInsets(top: 14.5, left: 0, bottom: -14.5, right: 0)
+        return tabBarItem
     }
     
     private func setUpControllers(){
@@ -55,6 +46,10 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
         
         controllers.append(createPlaceholderViewController(forIndex: 0))
         controllers.append(centerPageViewController)
+        controllers.append(createPlaceholderViewController(forIndex: 2))
+        controllers.append(createPlaceholderViewController(forIndex: 3))
+        controllers.append(createPlaceholderViewController(forIndex: 4))
+       
         
         setViewControllers(controllers, animated: false)
         
@@ -62,20 +57,20 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
     }
     
     func onTextChanged(text: String) {
-        
+        let items = searchUtils.searchItems(text: text)
+        tabOne.updateTableViewSearchResults(storeItems: items)
+        tabTwo.updateTableViewSearchResults(storeItems: items)
     }
     
     private func createCenterPageViewController() -> UIPageViewController? {
-        
-        let leftController = ListViewController()
-        let rightController = GridViewController()
-        
-        leftController.view.tag = 0
-        rightController.view.tag = 1
-                
+        tabOne.view.tag = 0
+        tabTwo.view.tag = 1
+        tabThree.view.tag = 2
+        tabFour.view.tag = 3
+        tabFive.view.tag = 4
         let pageViewController = PageViewController()
         
-        pageViewController.pages = [leftController, rightController]
+        pageViewController.pages = [tabOne, tabTwo,tabThree,tabFour,tabFive]
         pageViewController.tabBarItem = tabbarItem(at: 1)
         pageViewController.view.tag = 1
         pageViewController.swipeDelegate = self
@@ -103,17 +98,18 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
         self.tabBar.tintColor = selectedColor
         self.tabBar.unselectedItemTintColor = selectedColor
         
+        
         for i in 0..<viewControllers.count {
             let tabbarItem = viewControllers[i].tabBarItem
-            let tabbarImage = self.tabBarImages[i]
+            let tabbarImage = self.tabBarImage
             tabbarItem?.selectedImage = tabbarImage!.withRenderingMode(.alwaysTemplate)
             tabbarItem?.image = tabbarImage!.withRenderingMode(
                 i == selectedIndex ? .alwaysOriginal : .alwaysTemplate
             )
         }
         
-        if selectedIndex == 0 {
-            viewControllers[selectedIndex].tabBarItem.selectedImage = self.tabBarImages[0]!.withRenderingMode(.alwaysOriginal)
+        if selectedIndex == 1 {
+            viewControllers[selectedIndex].tabBarItem.selectedImage = self.tabBarImage!.withRenderingMode(.alwaysOriginal)
         }
     }
 }

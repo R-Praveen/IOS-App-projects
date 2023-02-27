@@ -7,14 +7,19 @@
 
 import Foundation
 
-class ViewModel{
+protocol ViewModelProtocol{
+    func getItems( callback: @escaping ([StoreItem]) -> ())
+    func getItemsFromCoreData(callback: @escaping ([StoreItem]) -> ())
+}
+
+class ViewModel: ViewModelProtocol{
     var networkService: NetworkService
     var coreDataHelper: CoreDataHelper
     
     //Initializing the network service and coredataHelper
-    init(){
-        networkService = NetworkService()
-        coreDataHelper = CoreDataHelper(coreDataStack: CoreDataStack())
+    init(networkService: NetworkService, coreDataHelper: CoreDataHelper){
+        self.networkService = networkService
+        self.coreDataHelper = coreDataHelper
     }
     
     /*This method fetches the value from the API and stores in the Core data
@@ -25,6 +30,7 @@ class ViewModel{
         networkService.getData(callback: {response in
             var storeItems: [StoreItem] = []
             apiData = response
+            self.coreDataHelper.deleteAll()
             if(apiData?.data.items != nil){
                 storeItems = self.coreDataHelper.saveStoreItems(items: apiData!.data.items)
 
@@ -37,6 +43,12 @@ class ViewModel{
             }
         })
        
+    }
+    
+    func getItemsFromCoreData(callback: @escaping ([StoreItem]) -> ()){
+            self.coreDataHelper.fetchItemsFromCoreData(saveItems: {storeItems in
+                callback(storeItems)
+            })
     }
 }
 

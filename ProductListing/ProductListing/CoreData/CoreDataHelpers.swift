@@ -11,24 +11,22 @@ import UIKit
 
 class CoreDataHelper{
     private let managedObjectContext: NSManagedObjectContext
-    private let coreDataStack: CoreDataStack
-    init(coreDataStack: CoreDataStack){
-        self.coreDataStack = coreDataStack
-        self.managedObjectContext = coreDataStack.context
+    init(managedObjectContext: NSManagedObjectContext){
+        self.managedObjectContext = managedObjectContext
     }
     /*Fetches Item from Core data and if local data is empty
-    value is fetched from API.
-    And the value is stored in the local storage
+     value is fetched from API.
+     And the value is stored in the local storage
      */
     func fetchItemsFromCoreData(saveItems: @escaping ([StoreItem]) -> ()){
-            var storeItems: [StoreItem]?
-            do{
-                storeItems  = try managedObjectContext.fetch(StoreItem.fetchRequest())
-            }
-            catch{
-                print(error)
-            }
-                saveItems(storeItems!)
+        var storeItems: [StoreItem]?
+        do{
+            storeItems  = try managedObjectContext.fetch(StoreItem.fetchRequest())
+        }
+        catch{
+            print(error)
+        }
+        saveItems(storeItems!)
         
     }
     
@@ -42,14 +40,31 @@ class CoreDataHelper{
             storeItem.image = item.image
             storeItem.extra = item.extra ?? ""
             storeItems.append(storeItem)
-            do {
-                try managedObjectContext.save()
-            }
-            catch{
-                print(error)
+            if managedObjectContext.hasChanges {
+                managedObjectContext.performAndWait({
+                    do {
+                        try managedObjectContext.save()
+                    }
+                    catch{
+                        print(error)
+                    }
+                })
             }
         })
         
         return storeItems
+    }
+    
+    func deleteAll(){
+        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "StoreItem")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+            do {
+                try managedObjectContext.execute(deleteRequest)
+                try managedObjectContext.save()
+            }
+            catch {
+                print ("There was an error")
+            }
+        
     }
 }

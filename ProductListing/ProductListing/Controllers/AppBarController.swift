@@ -14,8 +14,11 @@ protocol AppBarControllerDelegate{
 
 class AppBarController : UIViewController, UISearchBarDelegate  {
     var searchBar : UISearchBar = {
-        let uisb = UISearchBar()
-        return uisb
+        let searchBar = UISearchBar()
+        searchBar.isTranslucent = false
+        searchBar.barTintColor = .white
+        searchBar.layoutIfNeeded()
+        return searchBar
     }()
     private var exploreLabel: UILabel = UILabel()
     private var filterLabel: UILabel = UILabel()
@@ -28,13 +31,8 @@ class AppBarController : UIViewController, UISearchBarDelegate  {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
-        print(textSearched)
-        print("sdfds")
+        appBarControllerDelegate?.onTextChanged(text: textSearched)
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("search bar button clicked")
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +43,7 @@ class AppBarController : UIViewController, UISearchBarDelegate  {
         // properties of exploreLabel
         setAppExploreProperties()
         // properties of searchBar
-//        setSearchBarProperties()
-//        searchBar.delegate = self
+        setSearchBarProperties()
         // Adding views to subview
         view.addSubview(firstRow)
         view.addSubview(searchBar)
@@ -75,12 +72,12 @@ class AppBarController : UIViewController, UISearchBarDelegate  {
     
     //MARK: Setting the properties of the search bar in the Appbar
     func setSearchBarProperties(){
-        
+        searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
         searchBar.searchTextField.backgroundColor = UIColor.clear
-        searchBar.layer.cornerRadius = 30
-        searchBar.placeholder = AppStrings.search
-        
-        searchBar.backgroundColor = UIColor.white
+        searchBar.layer.cornerRadius = 25
+        searchBar.barStyle = .black
+        searchBar.placeholder = "Search"
+        searchBar.backgroundColor = .white
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         searchBar.setImage(UIImage(), for: .search, state: .normal)
     }
@@ -108,12 +105,12 @@ class AppBarController : UIViewController, UISearchBarDelegate  {
         filterLabel.topAnchor.constraint(equalTo: firstRow.topAnchor,constant: 20).isActive = true
         filterLabel.trailingAnchor.constraint(equalTo: firstRow.trailingAnchor).isActive = true
         filterLabel.bottomAnchor.constraint(equalTo: firstRow.bottomAnchor).isActive = true
-
+        
         //SearchBar Constraints
         searchBar.topAnchor.constraint(equalTo: firstRow.bottomAnchor,constant: 15).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 34).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -34).isActive = true
-
+        
     }
 }

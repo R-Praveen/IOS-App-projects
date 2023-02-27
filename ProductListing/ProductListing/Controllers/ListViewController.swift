@@ -19,13 +19,13 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var viewModel : ViewModel?
     var loader = LoaderView()
-
+    
     //MARK: Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         tableView.separatorStyle = .none
-        viewModel = ViewModel()
+        viewModel = ViewModel(networkService: NetworkService(), coreDataHelper: CoreDataHelper(managedObjectContext: CoreDataStack.shared.mainContext))
         addSubViews()
         setContraints()
         setTableViewValues()
@@ -45,6 +45,11 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         view.addSubview(tableView)
     }
     
+    func updateTableViewSearchResults(storeItems: [StoreItem]){
+        self.items = storeItems
+        tableView.reloadData()
+    }
+    
     //MARK: Setting the table view values and registering the cell for the table view , setting the row height
     func setTableViewValues(){
         tableView.register(ItemCellTableViewCell.self, forCellReuseIdentifier: ItemCellTableViewCell.identifier)
@@ -56,11 +61,15 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
      
     //MARK: Fetching the items to be shown in the table view
     func fetchItems(){
-        loader.startLoading(view: view)
+        if !pullToRefresh.isRefreshing {
+            loader.startLoading(view: view)
+        }
         viewModel!.getItems(callback: {storeItems in
             self.items = storeItems
             DispatchQueue.main.async {
-                self.loader.stopLoading(view: self.view)
+                if !self.pullToRefresh.isRefreshing {
+                    self.loader.stopLoading(view: self.view)
+                }
                 self.tableView.reloadData()
                 if self.pullToRefresh.isRefreshing {
                     self.pullToRefresh.endRefreshing()
@@ -80,21 +89,11 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: ItemCellTableViewCell.identifier, for: indexPath) as! ItemCellTableViewCell
         let item = items?[indexPath.row]
         cell.configureImageView(image: item?.image ?? "")
-        cell.configureTitle(title: item?.name ?? "")
-        cell.configureSubtitle(subtitle: item?.price ?? "")
-        cell.configureMRP()
-        cell.configureSameDayShipping(shippingDay: item?.extra ?? "")
+        cell.configuretitleLabel(titleLabel: item?.name ?? "")
+        cell.configuresubtitleLabel(subtitleLabel: item?.price ?? "")
+        cell.configuremrpLabel()
+        cell.configuresameDayShippingLabel(shippingDay: item?.extra ?? "")
         return cell
-    }
-    
-    func setAppBarConstraints(){
-        appBar.translatesAutoresizingMaskIntoConstraints = false
-        appBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        appBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        appBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        appBar.heightAnchor.constraint(equalToConstant: 170).isActive = true
-        appBar.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-        appBar.bottomAnchor.constraint(equalTo: tableView.topAnchor,constant: -30).isActive = true
     }
     //MARK: Setting the constraints for the appbar and the tableview
     func setContraints(){
