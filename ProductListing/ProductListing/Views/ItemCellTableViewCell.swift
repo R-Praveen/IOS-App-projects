@@ -126,7 +126,7 @@ class ItemCellTableViewCell: UITableViewCell {
     //Configuring the MRP label
     func configuremrpLabel(){
         mrpLabel.text = "MRP:"
-        mrpLabel.textColor = UIColor(named: "mrpLabelColor")
+        mrpLabel.textColor = UIColor(named: "mrpColor")
         mrpLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
     }
     

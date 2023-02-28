@@ -8,10 +8,12 @@
 import Foundation
 import UIKit
 
+//Protocol to listen to the text change on the App bar search field.
 protocol AppBarControllerDelegate{
     func onTextChanged(text: String)
 }
 
+//MARK: App bar for all the entire tab bars.
 class AppBarController : UIViewController, UISearchBarDelegate  {
     var searchBar : UISearchBar = {
         let searchBar = UISearchBar()

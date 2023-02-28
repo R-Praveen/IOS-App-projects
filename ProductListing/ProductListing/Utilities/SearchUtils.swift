@@ -16,24 +16,24 @@ class SearchUtils{
     
     func searchItems(text: String) -> [StoreItem]{
         var filteredItems: [StoreItem] = []
-        viewModel.getItemsFromCoreData(callback: {(items: [StoreItem]) in
+        viewModel.getItemsFromCoreData(callback: {items in
             if text.isEmpty || text.count<3 {
                 filteredItems = items
                 return
             }
                 
-        items.forEach({storeItem in
-                if storeItem.name?.contains(text) ?? false
+            (items as NSArray).forEach({storeItem in
+                if (storeItem as? StoreItem)?.name?.contains(text) ?? false
                 {
-                    filteredItems.append(storeItem)
+                    filteredItems.append((storeItem as! StoreItem))
                 }
-                else if storeItem.extra?.contains(text) ?? false
+                else if (storeItem as? StoreItem)?.extra?.contains(text) ?? false
                 {
-                    filteredItems.append(storeItem)
+                    filteredItems.append((storeItem as! StoreItem))
                 }
-                else if storeItem.price?.contains(text) ?? false
+                else if (storeItem as? StoreItem)?.price?.contains(text) ?? false
                 {
-                    filteredItems.append(storeItem)
+                    filteredItems.append((storeItem as! StoreItem))
                 }
             })
         })

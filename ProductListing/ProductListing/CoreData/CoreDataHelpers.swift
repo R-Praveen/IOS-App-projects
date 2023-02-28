@@ -65,6 +65,5 @@ class CoreDataHelper{
             catch {
                 print ("There was an error")
             }
-        
     }
 }

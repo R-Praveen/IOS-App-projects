@@ -15,6 +15,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     )
     var viewModel = ViewModel(networkService: NetworkService(), coreDataHelper: CoreDataHelper(managedObjectContext: CoreDataStack.shared.mainContext))
     var loader = LoaderView()
+    private var pullToRefresh = UIRefreshControl()
     var items: [StoreItem]?
     
     override func viewDidLoad() {
@@ -24,9 +25,16 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
         view.backgroundColor = .systemBackground
         addSubViews()
         setContraints()
+        gridView.refreshControl = pullToRefresh
         gridView.register(UIGridViewCell.self, forCellWithReuseIdentifier: UIGridViewCell.identifier)
+        pullToRefresh.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
         gridView.contentSize = CGSize(width: 100, height: 100)
         fetchItems()
+    }
+    
+    @objc func handlePullToRefresh(){
+        fetchItems()
+        pullToRefresh.endRefreshing()
     }
     
     //MARK: Adding the sub views for the Grid view
@@ -35,6 +43,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
         view.addSubview(gridView)
     }
     
+    //Updates the table view search results
     func updateTableViewSearchResults(storeItems: [StoreItem]){
         self.items = storeItems
         gridView.reloadData()
@@ -53,7 +62,7 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
             gridView.topAnchor.constraint(equalTo: view.topAnchor,constant: 190),
             gridView.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -170),
             gridView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
-            gridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 10),
+            gridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
             gridView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: 10),
         ]
         )
@@ -61,12 +70,19 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     //MARK: Fetching the items for the grid view from view model
     func fetchItems(){
-        loader.startLoading(view: view)
+        if !pullToRefresh.isRefreshing {
+            loader.startLoading(view: view)
+        }
         viewModel.getItems(callback: {storeItems in
             self.items = storeItems
             DispatchQueue.main.async {
-                self.loader.stopLoading(view: self.view)
+                if !self.pullToRefresh.isRefreshing {
+                    self.loader.stopLoading(view: self.view)
+                }
                 self.gridView.reloadData()
+                if self.pullToRefresh.isRefreshing {
+                    self.pullToRefresh.endRefreshing()
+                }
             }
         })
     }
@@ -100,6 +116,6 @@ class GridViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     //MARK: Setting the line spacing for the section
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 32
+        return 24
     }
 }

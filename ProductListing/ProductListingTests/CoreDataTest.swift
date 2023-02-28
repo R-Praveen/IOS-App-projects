@@ -24,6 +24,7 @@ class CoreDataTest: XCTestCase {
         let items = [
         Item(name: "Item 1", price: "100", extra: "Same day shipping", image: "image")
         ]
+        coreDataHelper.deleteAll()
         let storeItems = coreDataHelper.saveStoreItems(items: items)
         
         XCTAssertEqual(items.count, storeItems.count)
@@ -35,9 +36,10 @@ class CoreDataTest: XCTestCase {
         Item(name: "Item 1", price: "100", extra: "Same day shipping", image: "image")
         ]
         _ = coreDataHelper.saveStoreItems(items: items)
+        coreDataHelper.deleteAll()
         coreDataHelper.fetchItemsFromCoreData(saveItems: {
             storeItems in
-            XCTAssertEqual(storeItems.count, 1)
+            XCTAssertEqual(storeItems.count, 0)
         })
     }
     

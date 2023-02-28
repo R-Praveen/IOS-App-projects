@@ -12,8 +12,11 @@ class ProductListingUITests: XCTestCase {
     func testSearchProductLists(){
         let app = XCUIApplication()
         app.launch()
-        XCUIApplication().windows.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .searchField).element.tap()
-        
+        let searchField = app.searchFields["Search"]
+        searchField.tap()
+        searchField.typeText("Same")
+        let sameDayShipping = app.staticTexts["Same day shipping"]
+        XCTAssertTrue(sameDayShipping.exists)
     }
     
     func testCheckStaticUITexts(){

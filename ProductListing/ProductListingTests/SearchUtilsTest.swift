@@ -25,11 +25,21 @@ class SearchUtilsTest: XCTestCase {
         let items = [
         Item(name: "Item 1", price: "100", extra: "Same day shipping", image: "image")
         ]
+        coreDataHelper.deleteAll()
         _ = coreDataHelper.saveStoreItems(items: items)
         let storeItems = searchUtils.searchItems(text: "te")
         XCTAssertEqual(items.count, storeItems.count)
     }
     
+    func testSearchItemsMoreThanThreeKeyword(){
+        let items = [
+        Item(name: "Item 1", price: "100", extra: "Same day shipping", image: "image")
+        ]
+        coreDataHelper.deleteAll()
+        _ = coreDataHelper.saveStoreItems(items: items)
+        let storeItems = searchUtils.searchItems(text: "terr")
+        XCTAssertEqual(storeItems.count, 0)
+    }
 }
 
 

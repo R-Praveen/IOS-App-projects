@@ -16,7 +16,7 @@ class CoreDataTestStack{
     init() {
         persistentContainer = NSPersistentContainer(name: "Items")
         let description = persistentContainer.persistentStoreDescriptions.first
-        description?.type = NSInMemoryStoreType
+        description?.type = NSSQLiteStoreType
         
         persistentContainer.loadPersistentStores { description, error in
             guard error == nil else {

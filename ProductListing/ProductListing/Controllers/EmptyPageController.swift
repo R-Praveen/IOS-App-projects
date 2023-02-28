@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+//Controller responsible for the empty page.
 class EmptyPageController: UIViewController{
     
     var label = UITextView()

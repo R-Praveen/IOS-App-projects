@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISearchBarDelegate {
+class HomePageViewController: UITabBarController, AppBarControllerDelegate {
     let selectedColor = UIColor.gray
     let deselectedColor = UIColor.gray
     var appBarController = AppBarController()
@@ -36,7 +36,7 @@ class HomePageViewController: UITabBarController, AppBarControllerDelegate, UISe
         self.selectPage(at: 0)
     }
     
-    
+    //Setting up the tab bar item.
     private func tabbarItem() -> UITabBarItem {
         let tabBarItem = UITabBarItem(title: nil, image: tabBarImage, selectedImage: nil)
         tabBarItem.imageInsets = UIEdgeInsets(top: 8.5, left: 0, bottom: -8.5, right: 0)
